@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06231a">
+<title>Verdant Watches</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
+<!-- Phosphor Icons (regular + fill) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<style>
+:root{--forest:#06231a;--deep:#0b3d2e;--emerald:#10b981;--mint:#6ee7b7;--cream:#f6f2e8;--paper:#fffdf8;--ink:#10211b;--muted:#6a7a72;--gold:#c8a96a;
+--display:'Cormorant Garamond',Georgia,serif;--body:'Manrope',system-ui,sans-serif;--ease:cubic-bezier(.22,.8,.25,1);
+/* PHOTO FIT: "contain" shows the whole watch (no cropping). Change to "cover" to fill the frame and crop the edges. */
+--fit:contain;--pad:6%;}
+html{scroll-behavior:smooth;scroll-padding-top:80px;-webkit-text-size-adjust:100%}
+body{font-family:var(--body);background:var(--cream);color:var(--ink);overflow-x:hidden}
+h1,h2,h3,h4,h5,.brand{font-family:var(--display);font-weight:600;letter-spacing:-.01em}
+a{text-decoration:none;color:inherit}
+img{max-width:100%}
+[data-view]{cursor:pointer}
+:focus-visible{outline:2px solid var(--emerald);outline-offset:3px}
+
+/* ===== Navbar ===== */
+.vw-nav{background:var(--forest);padding:.8rem 0;z-index:1030;border-bottom:1px solid rgba(200,169,106,.18)}
+.nav-wrap{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:.5rem}
+.nav-left{justify-self:start}
+.brand{color:#fff;font-size:1.7rem;display:flex;align-items:center;gap:.55rem;margin:0;white-space:nowrap;justify-self:center}
+.brand i{color:var(--mint);font-size:1.8rem}
+.nav-icons{display:flex;gap:.15rem;justify-self:end}
+.vw-nav .nav-link{color:rgba(255,255,255,.8);position:relative;padding:.4rem 1rem!important;font-size:.95rem;transition:color .3s}
+.vw-nav .nav-link::after{content:"";position:absolute;left:1rem;right:1rem;bottom:0;height:1px;background:var(--mint);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.vw-nav .nav-link:hover{color:#fff}.vw-nav .nav-link:hover::after{transform:scaleX(1)}
+.icon-btn{background:none;border:0;color:#fff;font-size:1.4rem;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;position:relative;transition:background .3s,transform .3s var(--ease)}
+.icon-btn:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+.icon-btn.in{color:var(--mint)}
+.badge-count{position:absolute;top:2px;right:0;background:var(--emerald);color:var(--forest);font-size:.65rem;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;padding:0 4px}
+.bump{animation:bump .4s var(--ease)}@keyframes bump{50%{transform:scale(1.5)}}
+.dropdown-menu{background:var(--forest);border:1px solid rgba(200,169,106,.3);border-radius:16px;padding:.5rem}
+.dropdown-item{color:rgba(255,255,255,.8);border-radius:10px;padding:.55rem 1rem}
+.dropdown-item:hover{background:var(--deep);color:#fff}
+
+/* Luxury 3-stripe button */
+.menu-btn{width:46px;height:46px;border-radius:50%;border:1px solid rgba(200,169,106,.55);background:rgba(200,169,106,.08);color:var(--gold);font-size:1.5rem;display:grid;place-items:center;transition:all .4s var(--ease)}
+.menu-btn:hover,.menu-btn:focus-visible{background:var(--gold);color:var(--forest);transform:scale(1.05)}
+
+/* ===== Luxury side menu ===== */
+.offcanvas.menu-canvas{width:min(360px,88vw);color:#fff;border-right:1px solid rgba(200,169,106,.4);
+  background:radial-gradient(120% 55% at 0% 0%,#11573f 0%,transparent 62%),linear-gradient(180deg,#073024,#041812)}
+.menu-canvas .offcanvas-header{padding:1.2rem 1.4rem;border-bottom:1px solid rgba(200,169,106,.3)}
+.menu-canvas .brand{font-size:1.5rem}
+.menu-canvas .offcanvas-body{padding:1.2rem 1.4rem 1.6rem;display:flex;flex-direction:column}
+.menu-close{width:42px;height:42px;border-radius:50%;border:1px solid rgba(200,169,106,.55);background:none;color:var(--gold);font-size:1.2rem;display:grid;place-items:center;transition:all .4s var(--ease)}
+.menu-close:hover{background:var(--gold);color:var(--forest);transform:rotate(90deg)}
+.m-quick{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1.2rem}
+.m-quick button{position:relative;background:rgba(255,255,255,.05);border:1px solid rgba(200,169,106,.3);color:#fff;border-radius:16px;padding:.85rem .3rem;display:flex;flex-direction:column;align-items:center;gap:.35rem;font-size:.78rem;transition:all .4s var(--ease)}
+.m-quick button i{font-size:1.45rem;color:var(--gold);transition:color .3s}
+.m-quick button:hover{background:var(--gold);color:var(--forest);transform:translateY(-3px)}
+.m-quick button:hover i{color:var(--forest)}
+.m-badge{position:absolute;top:6px;right:12px;background:var(--emerald);color:var(--forest);font-size:.65rem;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;padding:0 4px}
+.m-main{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0;font-family:var(--display);font-size:1.9rem;line-height:1.1;color:#fff;border-bottom:1px solid rgba(255,255,255,.08)}
+.m-main i{font-size:1.1rem;color:var(--gold);transition:transform .4s var(--ease)}
+.m-main:hover{color:var(--mint)}.m-main:hover i{transform:translateX(6px)}
+.m-title{display:flex;align-items:center;gap:.8rem;color:var(--gold);font-size:.9rem;font-weight:600;margin:1.8rem 0 .3rem}
+.m-title::after{content:"";flex:1;height:1px;background:rgba(200,169,106,.35)}
+.m-cat{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0;font-family:var(--display);font-size:1.4rem;color:rgba(255,255,255,.9);border-bottom:1px solid rgba(255,255,255,.06);transition:color .3s,padding .4s var(--ease)}
+.m-cat i{font-size:1rem;color:var(--mint);transition:transform .4s var(--ease)}
+.m-cat i.lux{color:var(--gold)}
+.m-cat:hover{color:var(--mint);padding-left:.5rem}.m-cat:hover i{transform:translateX(5px)}
+.m-foot{margin-top:auto;padding-top:1.4rem;border-top:1px solid rgba(200,169,106,.3);display:flex;align-items:center;justify-content:space-between;color:rgba(255,255,255,.7);font-size:.9rem}
+.m-foot .soc{width:38px;height:38px;font-size:1.1rem}
+.menu-canvas .st{opacity:0;transform:translateX(-18px);transition:opacity .2s,transform .2s}
+.menu-canvas.show .st{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:calc(var(--i,0)*60ms + 150ms)}
+
+/* ===== Hero (centered) ===== */
+.hero{position:relative;background:radial-gradient(120% 90% at 50% 0%,var(--deep),var(--forest) 70%);color:#fff;padding:7rem 0 6rem;overflow:hidden;text-align:center}
+.hero::before{content:"";position:absolute;left:50%;top:48%;width:760px;height:760px;max-width:140vw;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(16,185,129,.3),transparent 64%);filter:blur(24px);pointer-events:none;animation:halo 7s ease-in-out infinite}
+@keyframes halo{50%{opacity:.55}}
+.hero .container{position:relative}
+.kicker{color:var(--mint);letter-spacing:.28em;font-size:.78rem;font-weight:600}
+.hero h1{font-size:clamp(2.7rem,9vw,6.4rem);line-height:1;margin:1.2rem 0 1.5rem}
+.hero .lead{color:rgba(255,255,255,.75);max-width:34rem;margin:0 auto;font-size:1.1rem;line-height:1.75}
+.cta{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin-top:2.2rem}
+.btn-vw{border-radius:50px;padding:.95rem 1.8rem;font-weight:600;font-size:.95rem;display:inline-flex;align-items:center;gap:.6rem;border:1px solid transparent;transition:all .4s var(--ease)}
+.btn-vw i{transition:transform .4s var(--ease)}.btn-vw:hover i{transform:translateX(5px)}
+.btn-solid{background:var(--emerald);color:var(--forest)}.btn-solid:hover{background:var(--mint);color:var(--forest)}
+.btn-line{border-color:rgba(255,255,255,.35);color:#fff}.btn-line:hover{background:#fff;color:var(--forest)}
+.perks{display:flex;flex-wrap:wrap;gap:1rem 2.2rem;justify-content:center;margin-top:3.5rem;color:rgba(255,255,255,.72);font-size:.92rem}
+.perks i{color:var(--mint);font-size:1.35rem;vertical-align:-4px;margin-right:.45rem}
+.enter{opacity:0;transform:translateY(24px);animation:enter .9s var(--ease) forwards}
+.d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}.d4{animation-delay:.55s}.d5{animation-delay:.7s}
+@keyframes enter{to{opacity:1;transform:none}}
+
+/* Drawn watch (shows only when a photo is missing or fails to load) */
+.watch{--s:var(--w,60%);width:var(--s);aspect-ratio:1;border-radius:50%;position:relative;display:grid;place-items:center;background:conic-gradient(from 210deg,#e9e4d3,#b9ae8a,#f2ecd8,#9c9170,#e9e4d3);box-shadow:0 20px 40px rgba(0,0,0,.25)}
+.watch .face{width:86%;height:86%;border-radius:50%;position:relative;background:radial-gradient(circle at 35% 30%,#1a6b50,#0b3d2e 70%)}
+.hand{position:absolute;left:50%;bottom:50%;transform-origin:bottom;border-radius:4px;background:#fffdf8}
+.hand.h{width:3%;height:26%;margin-left:-1.5%;transform:rotate(300deg)}
+.hand.m{width:2%;height:36%;margin-left:-1%;transform:rotate(60deg)}
+.pin{position:absolute;left:50%;top:50%;width:5%;height:5%;margin:-2.5%;border-radius:50%;background:var(--gold)}
+
+/* Product photo: fits the frame on every screen size */
+.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:var(--fit);object-position:center;padding:var(--pad);transition:transform .8s var(--ease);z-index:1}
+/* once a real photo has loaded, the drawn placeholder is hidden so it never peeks out behind it */
+.media.has-img .watch,.cart-thumb.has-img .watch{display:none}
+
+/* ===== Sections & cards ===== */
+.section{padding:5rem 0}.section.alt{background:var(--paper)}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem}
+.section h2{font-size:clamp(2rem,4vw,3rem);color:var(--forest);margin:0}
+.sub{color:var(--muted);margin:.3rem 0 0}
+.tag-lux{display:inline-flex;gap:.4rem;align-items:center;font-size:.85rem;font-weight:600;color:var(--gold);margin-bottom:.4rem}
+.card-vw{background:var(--paper);border-radius:24px;overflow:hidden;height:100%;display:flex;flex-direction:column;border:1px solid rgba(6,35,26,.08);transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.alt .card-vw{background:var(--cream)}
+.card-vw:hover{transform:translateY(-8px);box-shadow:0 28px 55px rgba(6,35,26,.14)}
+.card-vw:hover .photo{transform:scale(1.05)}
+.media{position:relative;width:100%;background:linear-gradient(160deg,#f1f5f1,#dfe9e2);aspect-ratio:1/1;display:grid;place-items:center;overflow:hidden}
+.wish{position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,253,248,.92);font-size:1.25rem;color:var(--forest);display:grid;place-items:center;transition:transform .3s var(--ease);z-index:3}
+.wish:hover{transform:scale(1.12)}.wish.on{color:#c2410c}
+.off-badge{position:absolute;top:14px;left:14px;background:var(--emerald);color:var(--forest);font-weight:700;font-size:.8rem;padding:.4rem .75rem;border-radius:50px;display:flex;gap:.3rem;align-items:center;z-index:3}
+.off-badge i{font-size:1rem}
+.body-vw{padding:1.4rem 1.5rem 1.6rem;display:flex;flex-direction:column;flex:1}
+.body-vw h3{font-size:1.5rem;margin:0 0 .3rem;color:var(--forest)}
+.body-vw p{color:var(--muted);font-size:.9rem;margin-bottom:.8rem}
+.stars{color:var(--gold);display:flex;gap:2px;margin-bottom:.9rem}
+.price{font-family:var(--display);font-size:1.7rem;font-weight:600;color:var(--deep);margin-top:auto;margin-bottom:1rem;display:flex;align-items:baseline;flex-wrap:wrap;gap:.1rem .6rem;overflow-wrap:anywhere}
+.price s{font-family:var(--body);font-size:.9rem;color:var(--muted);font-weight:500}
+.btn-cart{width:100%;justify-content:center;background:var(--forest);color:#fff;border-radius:14px;padding:.85rem}
+.btn-cart:hover{background:var(--deep);color:#fff}.btn-cart.added{background:var(--emerald);color:var(--forest)}
+.btn-cart:disabled{opacity:.75}
+.view-all{color:var(--deep);font-weight:600;display:inline-flex;gap:.4rem;align-items:center;border-bottom:1px solid var(--deep);padding-bottom:2px}
+
+/* ===== Product details window ===== */
+#detailModal .modal-header{padding:1rem 1.4rem;border-bottom:1px solid rgba(6,35,26,.08)}
+#detailModal .modal-title{font-size:1.6rem}
+#detailModal .modal-body{padding:1.6rem}
+.d-media{border-radius:22px}
+.d-brand{color:var(--gold);font-weight:600;font-size:.9rem;display:flex;gap:.4rem;align-items:center}
+.d-name{font-size:clamp(2rem,4vw,2.8rem);color:var(--forest);margin:.2rem 0 .5rem;line-height:1.05}
+.d-desc{color:var(--muted);line-height:1.7;margin:0}
+.d-price{font-family:var(--display);font-size:2.4rem;font-weight:600;color:var(--deep);display:flex;align-items:baseline;flex-wrap:wrap;gap:.2rem .8rem;margin:.6rem 0 1.1rem}
+.d-price s{font-family:var(--body);font-size:1rem;color:var(--muted);font-weight:500}
+.d-off{font-family:var(--body);font-size:.8rem;font-weight:700;background:var(--emerald);color:var(--forest);padding:.3rem .7rem;border-radius:50px;display:inline-flex;gap:.3rem;align-items:center}
+.d-perks{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1.4rem}
+.d-perk{display:flex;gap:.6rem;align-items:center;background:var(--cream);border-radius:14px;padding:.7rem .8rem}
+.d-perk i{font-size:1.4rem;color:var(--deep);flex:none}
+.d-perk strong{display:block;font-size:.85rem;color:var(--forest)}
+.d-perk small{color:var(--muted);font-size:.75rem}
+.d-sim{margin-top:2.2rem;padding-top:1.8rem;border-top:1px solid rgba(6,35,26,.1)}
+.d-sim h3{font-size:1.9rem;color:var(--forest);margin:0}
+.sim{background:var(--cream);border:1px solid rgba(6,35,26,.08);border-radius:18px;overflow:hidden;height:100%;display:flex;flex-direction:column;transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+.sim:hover{transform:translateY(-5px);box-shadow:0 18px 38px rgba(6,35,26,.13)}
+.sim:hover .photo{transform:scale(1.05)}
+.sim-b{padding:.8rem .9rem 1rem}
+.sim-b h4{font-size:1.1rem;color:var(--forest);margin:0 0 .25rem;line-height:1.15}
+.sim-b span{font-family:var(--display);font-size:1.2rem;font-weight:600;color:var(--deep)}
+
+/* ===== Offer banners between sections ===== */
+.offer-sec{padding:2.5rem 0;background:var(--cream)}
+.offer{border-radius:28px;padding:2rem 2.4rem;display:flex;align-items:center;gap:1.6rem;position:relative;overflow:hidden;transition:transform .5s var(--ease)}
+.offer:hover{transform:translateY(-4px)}
+.offer .o-ic{font-size:2.4rem;width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center;flex:none}
+.offer .o-txt{flex:1;min-width:0}
+.offer h3{font-size:clamp(1.6rem,3vw,2.3rem);margin:0}
+.offer p{margin:.3rem 0 0;opacity:.85}
+.offer .code,.offer .btn-vw{flex:none}
+.offer.o1{background:linear-gradient(120deg,#12a574,var(--deep));color:#fff}
+.offer.o2{background:var(--forest);color:#fff;box-shadow:inset 0 0 0 1px var(--gold)}
+.offer.o2 .o-ic{color:var(--gold)}
+.offer.o3{background:var(--gold);color:var(--forest)}
+.offer.o4{background:#e3f4ea;color:var(--forest);box-shadow:inset 0 0 0 1px var(--emerald)}
+.offer.o3 .o-ic,.offer.o4 .o-ic{background:rgba(6,35,26,.1)}
+.code{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;border:1.5px dashed currentColor;border-radius:50px;padding:.7rem 1.3rem;font-weight:700;background:transparent;color:inherit;transition:background .3s}
+.code:hover{background:rgba(255,255,255,.2)}
+.offer.o4 .code:hover{background:rgba(6,35,26,.08)}
+
+/* ===== About ===== */
+.about-lead{font-family:var(--display);font-size:1.8rem;line-height:1.35;color:var(--forest);margin:1.2rem 0}
+.about p{color:var(--muted);line-height:1.8}
+.about-stats{display:flex;gap:2.4rem;flex-wrap:wrap;margin-top:2rem}
+.about-stats strong{display:block;font-family:var(--display);font-size:3rem;color:var(--deep);line-height:1}
+.about-stats small{color:var(--muted)}
+.pillar{background:var(--paper);border:1px solid rgba(6,35,26,.08);border-radius:22px;padding:1.6rem;height:100%;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.pillar:hover{transform:translateY(-6px);box-shadow:0 22px 45px rgba(6,35,26,.12)}
+.pillar i{font-size:1.7rem;color:var(--forest);background:#dff1e7;width:54px;height:54px;border-radius:16px;display:grid;place-items:center;margin-bottom:1rem}
+.pillar h4{font-size:1.35rem;color:var(--forest);margin-bottom:.4rem}
+.pillar p{font-size:.9rem;margin:0}
+
+/* ===== Cart drawer ===== */
+.cart-canvas{width:min(430px,100vw);background:var(--paper)}
+.offcanvas-header{border-bottom:1px solid rgba(6,35,26,.08)}
+.offcanvas-title{font-family:var(--display);font-size:1.8rem;color:var(--forest)}
+.cart-row{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid rgba(6,35,26,.08)}
+.cart-thumb{width:76px;height:76px;border-radius:14px;background:linear-gradient(160deg,#f1f5f1,#dfe9e2);position:relative;overflow:hidden;flex:none;display:grid;place-items:center}
+.cart-thumb .watch{--w:70%;box-shadow:none}
+.cart-thumb .photo{padding:4%}
+.cart-info{flex:1;min-width:0}
+.cart-info h4{font-size:1.15rem;margin:0;color:var(--forest)}
+.cart-info small{color:var(--muted)}
+.qty{display:inline-flex;align-items:center;border:1px solid rgba(6,35,26,.18);border-radius:50px;margin-top:.4rem}
+.qty button{background:none;border:0;width:30px;height:30px;display:grid;place-items:center;color:var(--forest)}
+.qty span{min-width:24px;text-align:center;font-weight:600;font-size:.9rem}
+.rm{background:none;border:0;color:#b91c1c;font-size:1.2rem;align-self:flex-start}
+.cart-empty{text-align:center;color:var(--muted);padding:4rem 1rem}
+.cart-empty i{font-size:3rem;color:var(--deep);display:block;margin-bottom:.6rem}
+.cart-foot{border-top:1px solid rgba(6,35,26,.08);padding:1.2rem 1rem}
+.total{display:flex;justify-content:space-between;font-family:var(--display);font-size:1.6rem;color:var(--forest);margin-bottom:1rem}
+
+/* ===== Checkout page ===== */
+#checkoutPage{background:var(--cream);padding:2.5rem 0 5rem;min-height:70vh}
+.co-back{background:none;border:0;color:var(--deep);font-weight:600;display:inline-flex;gap:.5rem;align-items:center;padding:0;margin-bottom:1.4rem}
+.co-back i{transition:transform .4s var(--ease)}.co-back:hover i{transform:translateX(-5px)}
+.co-title{font-size:clamp(2.2rem,5vw,3.4rem);color:var(--forest);margin:0}
+.co-card{background:var(--paper);border:1px solid rgba(6,35,26,.08);border-radius:24px;padding:1.8rem}
+.co-card h3{font-size:1.7rem;color:var(--forest);display:flex;gap:.7rem;align-items:center;margin:0 0 1.3rem}
+.co-num{width:34px;height:34px;border-radius:50%;background:var(--forest);color:#fff;font-family:var(--body);font-size:.9rem;font-weight:600;display:grid;place-items:center;flex:none}
+.co-card .form-label{font-size:.85rem;font-weight:600;color:var(--forest);margin-bottom:.35rem}
+.co-card .form-control,.co-card .form-select{border-radius:12px;padding:.8rem 1rem;border:1px solid rgba(6,35,26,.18);background-color:#fff}
+.co-card .form-control:focus,.co-card .form-select:focus{border-color:var(--emerald);box-shadow:0 0 0 .2rem rgba(16,185,129,.18)}
+.pay-opt{display:flex;gap:1rem;align-items:center;border:1.5px solid rgba(6,35,26,.15);border-radius:16px;padding:1rem 1.1rem;cursor:pointer;margin-bottom:.8rem;background:#fff;transition:border-color .3s,background .3s}
+.pay-opt:hover{border-color:var(--emerald)}
+.pay-opt.sel{border-color:var(--emerald);background:#e9f8f1}
+.pay-opt input{accent-color:var(--emerald);width:1.15rem;height:1.15rem;flex:none}
+.pay-opt .big{font-size:1.9rem;color:var(--deep);flex:none}
+.pay-opt strong{display:block;color:var(--forest)}
+.pay-opt small{color:var(--muted)}
+.upi-box{background:#f3f8f5;border-radius:16px;padding:1.1rem;margin-top:.2rem}
+.co-sum{position:sticky;top:90px}
+.co-item{display:flex;gap:.9rem;align-items:center;padding:.85rem 0;border-bottom:1px solid rgba(6,35,26,.08)}
+.co-item .cart-thumb{width:64px;height:64px;border-radius:12px}
+.co-item .nm{flex:1;min-width:0}
+.co-item .nm strong{display:block;font-family:var(--display);font-size:1.15rem;color:var(--forest);line-height:1.15}
+.co-item .nm small{color:var(--muted)}
+.co-item .pr{font-weight:600;color:var(--deep);white-space:nowrap}
+.sum-row{display:flex;justify-content:space-between;padding:.45rem 0;color:var(--muted)}
+.sum-row.big{font-family:var(--display);font-size:1.8rem;font-weight:600;color:var(--forest);border-top:1px solid rgba(6,35,26,.1);margin-top:.5rem;padding-top:.9rem}
+.co-note{font-size:.8rem;color:var(--muted);display:flex;gap:.5rem;align-items:flex-start;margin-top:.9rem}
+.co-note i{color:var(--deep);font-size:1.1rem;flex:none}
+.co-done{text-align:center;max-width:720px;margin:0 auto}
+.done-ic{font-size:5rem;color:var(--emerald);line-height:1;margin-bottom:.4rem}
+.co-done .co-card{padding:1.6rem}
+.co-done h4{font-size:1.3rem;color:var(--forest);margin:0 0 .5rem}
+.co-line{display:flex;justify-content:space-between;gap:1rem;padding:.4rem 0;border-bottom:1px dashed rgba(6,35,26,.12)}
+
+/* ===== Modals / forms ===== */
+.modal-content{border:0;border-radius:24px;background:var(--paper)}
+.modal-title,.auth h3{font-family:var(--display);color:var(--forest)}
+.form-control{border-radius:12px;padding:.8rem 1rem;border:1px solid rgba(6,35,26,.18);background:#fff}
+.form-control:focus{border-color:var(--emerald);box-shadow:0 0 0 .2rem rgba(16,185,129,.18)}
+.pw{position:relative}.pw button{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:0;font-size:1.2rem;color:var(--muted)}
+.nav-pills .nav-link{color:var(--forest);border-radius:50px}.nav-pills .nav-link.active{background:var(--forest)}
+.search-hit{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 0;border-bottom:1px solid rgba(6,35,26,.08)}
+
+/* ===== Footer ===== */
+footer{background:#041812;color:rgba(255,255,255,.7)}
+.f-perks{border-bottom:1px solid rgba(255,255,255,.08);padding:2rem 0}
+.f-perk{display:flex;align-items:center;gap:.9rem}
+.f-perk i{font-size:1.9rem;color:var(--mint);flex:none}
+.f-perk strong{display:block;color:#fff;font-size:.95rem}
+.f-perk small{color:rgba(255,255,255,.55)}
+.f-main{padding:4rem 0 3rem}
+.f-title{font-size:1.45rem;color:#fff;margin-bottom:1.1rem}
+.f-main p{font-size:.92rem;line-height:1.7}
+.f-list{list-style:none;padding:0;margin:0;display:grid;gap:.65rem;font-size:.92rem}
+.f-list a{transition:color .3s,padding .3s var(--ease)}
+.f-list a:hover{color:var(--mint);padding-left:.3rem}
+.f-item{display:flex;gap:.8rem;align-items:flex-start;font-size:.92rem;margin-bottom:.95rem;overflow-wrap:anywhere}
+.f-item i{color:var(--mint);font-size:1.25rem;margin-top:2px;flex:none}
+.f-item strong{display:block;color:#fff}
+.f-item a:hover{color:var(--mint)}
+.socials{display:flex;gap:.6rem;margin:1.4rem 0}
+.soc{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;color:#fff;font-size:1.25rem;transition:all .4s var(--ease)}
+.soc:hover{background:var(--emerald);border-color:var(--emerald);color:var(--forest);transform:translateY(-4px)}
+.news{display:flex;gap:.5rem}
+.news input{flex:1;min-width:0;border-radius:50px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff;padding:.7rem 1.1rem}
+.news input::placeholder{color:rgba(255,255,255,.45)}
+.news button{border:0;border-radius:50px;background:var(--emerald);color:var(--forest);width:46px;font-size:1.2rem;transition:background .3s;flex:none}
+.news button:hover{background:var(--mint)}
+.f-bottom{border-top:1px solid rgba(255,255,255,.08);padding:1.4rem 0;font-size:.85rem}
+.f-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem}
+.f-bottom .pay{display:flex;gap:.8rem;font-size:1.6rem;color:rgba(255,255,255,.55)}
+.f-links{display:flex;gap:1.2rem}
+.f-bottom a:hover{color:var(--mint)}
+
+.vw-toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,120px);max-width:calc(100vw - 32px);background:var(--forest);color:#fff;padding:.9rem 1.4rem;border-radius:50px;display:flex;gap:.6rem;align-items:center;box-shadow:0 14px 40px rgba(0,0,0,.3);transition:transform .5s var(--ease);z-index:2000}
+.vw-toast.show{transform:translate(-50%,0)}.vw-toast i{color:var(--mint);flex:none}
+
+/* ===== Responsive alignment ===== */
+@media(min-width:576px){
+ #detailModal .modal-content{border-radius:26px;overflow:hidden}
+}
+@media(min-width:992px){
+ .nav-wrap{display:flex;justify-content:space-between}
+ .brand{justify-self:auto}
+}
+@media(max-width:991px){
+ #footShop{grid-template-columns:1fr 1fr}
+ .co-sum{position:static}
+}
+@media(max-width:767px){
+ .section{padding:3.5rem 0}
+ .offer{flex-direction:column;align-items:flex-start;padding:1.6rem;gap:1.1rem}
+ .offer .o-ic{width:60px;height:60px;font-size:2rem}
+ .offer .code,.offer .btn-vw{width:100%}
+ .about-lead{font-size:1.5rem}
+}
+
+/* ===== PHONE LAYOUT ===== */
+@media(max-width:575px){
+ .container{--bs-gutter-x:2rem}
+
+ /* navbar: compact so menu button, logo and icons always fit on one line */
+ .vw-nav{padding:.55rem 0}
+ .nav-wrap{gap:.25rem}
+ .brand{font-size:1.25rem;gap:.4rem}.brand i{font-size:1.35rem}
+ .menu-btn{width:42px;height:42px;font-size:1.35rem}
+ .nav-icons{gap:0}
+ .nav-icons .icon-btn{width:40px;height:40px;font-size:1.3rem}
+
+ /* hero */
+ .hero{padding:4.5rem 0 3.5rem}
+ .kicker{letter-spacing:.2em;font-size:.7rem}
+ .hero h1{margin:1rem 0 1.2rem}
+ .hero .lead{font-size:1rem;line-height:1.7}
+ .cta{flex-direction:column;align-items:center;margin-top:1.8rem}
+ .cta .btn-vw{width:min(100%,320px);justify-content:center}
+ .perks{flex-direction:column;align-items:center;gap:.7rem;margin-top:2.2rem}
+
+ /* section headings */
+ .section{padding:3rem 0}
+ .sec-head{margin-bottom:1.6rem;gap:.6rem}
+ .view-all{font-size:.9rem}
+
+ /* product cards: one per row, full-width square photo, whole watch always visible */
+ .card-vw{border-radius:20px}
+ .media{aspect-ratio:1/1}
+ .media .photo{padding:0}
+ .media::before{content:"";position:absolute;inset:-24px;background:var(--img) center/cover no-repeat;filter:blur(20px) saturate(1.1);opacity:.55}
+ .wish{width:40px;height:40px;top:12px;right:12px}
+ .off-badge{top:12px;left:12px}
+ .body-vw{padding:1.15rem 1.2rem 1.3rem}
+ .body-vw h3{font-size:1.4rem}
+ .price{font-size:1.6rem}
+ .btn-cart{padding:.95rem}
+
+ /* details window (full screen on phones) */
+ #detailModal .modal-header{padding:.8rem 1rem}
+ #detailModal .modal-body{padding:1rem}
+ .d-media{border-radius:18px}
+ .d-price{font-size:2rem}
+ .d-sim{margin-top:1.8rem;padding-top:1.4rem}
+ .d-sim h3{font-size:1.6rem}
+ .sim-b{padding:.7rem .75rem .9rem}
+ .sim-b h4{font-size:1rem}
+
+ /* checkout */
+ #checkoutPage{padding:1.6rem 0 3rem}
+ .co-card{padding:1.2rem;border-radius:20px}
+ .co-card h3{font-size:1.45rem;margin-bottom:1.1rem}
+ .pay-opt{padding:.85rem .9rem;gap:.8rem}
+ .pay-opt .big{font-size:1.6rem}
+ .co-done .co-card{padding:1.1rem}
+
+ /* offers, about, contact */
+ .offer{padding:1.4rem;border-radius:22px}
+ .about-stats{gap:1.6rem}
+ .pillar{padding:1.3rem}
+
+ /* footer */
+ .f-perks{padding:1.4rem 0}
+ .f-perk{flex-direction:column;align-items:flex-start;gap:.45rem}
+ .f-perk i{font-size:1.6rem}
+ .f-perk strong{font-size:.9rem}
+ .f-perk small{font-size:.8rem}
+ .f-main{padding:2.5rem 0 1.5rem}
+ .f-main .row{--bs-gutter-y:2rem}
+ .f-title{margin-bottom:.9rem}
+ .socials{margin:1.1rem 0}
+ .f-row{flex-direction:column;text-align:center;justify-content:center}
+}
+@media(max-width:389px){.brand{font-size:1.1rem}}
+@media(max-width:359px){.brand i{display:none}.nav-icons .icon-btn{width:36px;height:36px}}
+
+/* touch screens: no stuck hover effects after a tap */
+@media(hover:none){
+ .card-vw:hover,.pillar:hover,.offer:hover,.sim:hover{transform:none;box-shadow:none}
+ .card-vw:hover .photo,.sim:hover .photo{transform:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.enter,.menu-canvas .st{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- ===== Navbar ===== -->
+<nav class="vw-nav sticky-top">
+  <div class="container nav-wrap">
+    <div class="nav-left d-lg-none">
+      <button class="menu-btn" aria-label="Open menu" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu"><i class="ph ph-list"></i></button>
+    </div>
+    <a class="brand" href="#home"><i class="ph ph-watch"></i>Verdant Watches</a>
+    <ul class="nav d-none d-lg-flex">
+      <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="#verdant">Watches</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Collections <i class="ph ph-caret-down"></i></a>
+        <ul class="dropdown-menu" id="brandMenu"></ul>
+      </li>
+      <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+      <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-icons">
+      <button class="icon-btn" aria-label="Search" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="ph ph-magnifying-glass"></i></button>
+      <button class="icon-btn d-none d-md-grid" id="userBtn" aria-label="Account" data-bs-toggle="modal" data-bs-target="#authModal"><i class="ph ph-user"></i></button>
+      <button class="icon-btn d-none d-md-grid" aria-label="Wishlist" data-wishlist><i class="ph ph-heart"></i><span class="badge-count wish-count">0</span></button>
+      <button class="icon-btn" aria-label="Cart" data-bs-toggle="offcanvas" data-bs-target="#cartDrawer"><i class="ph ph-shopping-bag"></i><span class="badge-count" id="cartCount">0</span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Luxury side menu ===== -->
+<div class="offcanvas offcanvas-start menu-canvas" tabindex="-1" id="mobileMenu" aria-label="Menu">
+  <div class="offcanvas-header">
+    <span class="brand"><i class="ph ph-watch"></i>Verdant Watches</span>
+    <button class="menu-close" data-bs-dismiss="offcanvas" aria-label="Close menu"><i class="ph ph-x"></i></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="m-quick st" style="--i:1">
+      <button type="button" data-menu-open="auth"><i class="ph ph-user"></i><span id="menuUserLabel">Log in</span></button>
+      <button type="button" data-wishlist><i class="ph ph-heart"></i><span>Wishlist</span><b class="m-badge wish-count">0</b></button>
+      <button type="button" data-menu-open="search"><i class="ph ph-magnifying-glass"></i><span>Search</span></button>
+    </div>
+    <a class="m-main st" style="--i:2" href="#home">Home<i class="ph ph-arrow-right"></i></a>
+    <a class="m-main st" style="--i:3" href="#about">About<i class="ph ph-arrow-right"></i></a>
+    <a class="m-main st" style="--i:4" href="#contact">Contact<i class="ph ph-arrow-right"></i></a>
+    <div class="m-title st" style="--i:5">Collections</div>
+    <div id="mobileCats"></div>
+    <div class="m-foot st" style="--i:14">
+      <span>Follow us</span>
+      <div class="d-flex gap-2">
+        <a class="soc" href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+        <a class="soc" href="https://x.com/" target="_blank" rel="noopener" aria-label="X"><i class="ph ph-x-logo"></i></a>
+        <a class="soc" href="https://youtube.com/" target="_blank" rel="noopener" aria-label="YouTube"><i class="ph ph-youtube-logo"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SHOP (hidden while the checkout page is open) ================= -->
+<div id="shop">
+
+<!-- ===== Hero ===== -->
+<header class="hero" id="home">
+  <div class="container">
+    <div class="kicker enter d1">TIMELESS CRAFTSMANSHIP</div>
+    <h1 class="enter d2">Time, Crafted<br>For You.</h1>
+    <p class="lead enter d3">Discover precision-crafted watches designed for those who appreciate timeless elegance.</p>
+    <div class="cta enter d4">
+      <a href="#verdant" class="btn-vw btn-solid">Explore Watches <i class="ph ph-arrow-right"></i></a>
+      <a href="#rolex" class="btn-vw btn-line">View Collection <i class="ph ph-arrow-right"></i></a>
+    </div>
+    <div class="perks enter d5">
+      <span><i class="ph ph-truck"></i>Free insured delivery</span>
+      <span><i class="ph ph-shield-check"></i>100% authentic</span>
+      <span><i class="ph ph-arrow-counter-clockwise"></i>7-day returns</span>
+    </div>
+  </div>
+</header>
+
+<!-- Brand sections + offer banners are rendered here by the script -->
+<main id="brandSections"></main>
+
+<!-- ===== About ===== -->
+<section class="section about" id="about"><div class="container">
+  <div class="row g-5 align-items-center">
+    <div class="col-lg-6">
+      <h2>About Verdant</h2>
+      <p class="about-lead">A watch should feel made for one person, and last long enough to be passed on.</p>
+      <p>Verdant Watches brings together Swiss icons like Rolex and Patek Philippe, trusted names like Seiko and Tissot, and our own emerald-dial Verdant line. Every watch is checked by our team before it ships, arrives insured, and comes with the brand warranty.</p>
+      <div class="about-stats">
+        <div><strong>5</strong><small>Brands</small></div>
+        <div><strong>4</strong><small>Outlets</small></div>
+        <div><strong>7</strong><small>Day returns</small></div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="row g-3">
+        <div class="col-sm-6"><div class="pillar"><i class="ph ph-seal-check"></i><h4>Authentic only</h4><p>Every watch comes with its brand box, papers and warranty.</p></div></div>
+        <div class="col-sm-6"><div class="pillar"><i class="ph ph-wrench"></i><h4>Expert service</h4><p>Servicing, strap changes and repairs by trained watchmakers.</p></div></div>
+        <div class="col-sm-6"><div class="pillar"><i class="ph ph-leaf"></i><h4>Made to last</h4><p>We stock watches built to be worn for years, not seasons.</p></div></div>
+        <div class="col-sm-6"><div class="pillar"><i class="ph ph-headset"></i><h4>Real people</h4><p>Call or message us and a person answers, not a bot.</p></div></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== Contact form ===== -->
+<section class="section alt" id="contact"><div class="container" style="max-width:760px">
+  <div class="text-center mb-4">
+    <h2>Send us a message</h2>
+    <p class="sub">Need help choosing a watch? We reply within one working day. Phone and outlet details are in the footer.</p>
+  </div>
+  <form id="contactForm" class="row g-3">
+    <div class="col-md-6"><input class="form-control" placeholder="Your name" required></div>
+    <div class="col-md-6"><input class="form-control" type="tel" placeholder="Phone number" required></div>
+    <div class="col-12"><input class="form-control" type="email" placeholder="Email address" required></div>
+    <div class="col-12"><textarea class="form-control" rows="4" placeholder="How can we help?" required></textarea></div>
+    <div class="col-12 text-center"><button class="btn-vw btn-cart" style="width:auto;padding:.9rem 2.2rem" type="submit">Send message <i class="ph ph-paper-plane-tilt"></i></button></div>
+  </form>
+</div></section>
+
+</div><!-- /#shop -->
+
+<!-- ================= CHECKOUT PAGE ================= -->
+<section id="checkoutPage" hidden>
+  <div class="container">
+
+    <!-- form view -->
+    <div id="coMain">
+      <button type="button" class="co-back" data-co-back><i class="ph ph-arrow-left"></i>Back to shop</button>
+      <div class="mb-4">
+        <h1 class="co-title">Checkout</h1>
+        <p class="sub">Add your delivery address and choose how you would like to pay.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <form id="coForm" novalidate>
+            <!-- 1. address -->
+            <div class="co-card mb-4">
+              <h3><span class="co-num">1</span>Delivery address</h3>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label" for="coName">Full name</label>
+                  <input class="form-control" id="coName" name="name" autocomplete="name" required>
+                  <div class="invalid-feedback">Please enter your full name.</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="coPhone">Mobile number</label>
+                  <input class="form-control" id="coPhone" name="phone" type="tel" inputmode="numeric" maxlength="10" pattern="[6-9][0-9]{9}" autocomplete="tel-national" placeholder="10-digit number" required>
+                  <div class="invalid-feedback">Enter a valid 10-digit mobile number.</div>
+                </div>
+                <div class="col-12">
+                  <label class="form-label" for="coEmail">Email address</label>
+                  <input class="form-control" id="coEmail" name="email" type="email" autocomplete="email" required>
+                  <div class="invalid-feedback">Please enter a valid email address.</div>
+                </div>
+                <div class="col-12">
+                  <label class="form-label" for="coLine1">House / flat no. and street</label>
+                  <input class="form-control" id="coLine1" name="line1" autocomplete="address-line1" required>
+                  <div class="invalid-feedback">Please enter your address.</div>
+                </div>
+                <div class="col-12">
+                  <label class="form-label" for="coLine2">Area and landmark <span class="text-muted fw-normal">(optional)</span></label>
+                  <input class="form-control" id="coLine2" name="line2" autocomplete="address-line2">
+                </div>
+                <div class="col-md-5">
+                  <label class="form-label" for="coCity">City</label>
+                  <input class="form-control" id="coCity" name="city" autocomplete="address-level2" required>
+                  <div class="invalid-feedback">Please enter your city.</div>
+                </div>
+                <div class="col-md-4 col-7">
+                  <label class="form-label" for="coState">State</label>
+                  <select class="form-select" id="coState" name="state" autocomplete="address-level1" required></select>
+                  <div class="invalid-feedback">Please choose a state.</div>
+                </div>
+                <div class="col-md-3 col-5">
+                  <label class="form-label" for="coPin">PIN code</label>
+                  <input class="form-control" id="coPin" name="pin" inputmode="numeric" maxlength="6" pattern="[1-9][0-9]{5}" autocomplete="postal-code" required>
+                  <div class="invalid-feedback">Enter a 6-digit PIN.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. payment -->
+            <div class="co-card">
+              <h3><span class="co-num">2</span>Payment method</h3>
+              <label class="pay-opt sel" id="optUpi">
+                <input type="radio" name="pay" value="upi" checked>
+                <i class="ph ph-qr-code big"></i>
+                <div><strong>UPI</strong><small>Pay with any UPI app</small></div>
+              </label>
+              <div class="upi-box mb-3" id="upiBox">
+                <label class="form-label" for="coUpi">UPI ID</label>
+                <input class="form-control" id="coUpi" name="upi" pattern="[\w.\-]{2,}@[A-Za-z]{2,}" placeholder="name@bank" autocapitalize="none" autocomplete="off" required>
+                <div class="invalid-feedback">Enter a valid UPI ID, like name@bank.</div>
+                <div class="co-note"><i class="ph ph-info"></i><span>You will get a payment request in your UPI app. Demo store: no real payment is taken.</span></div>
+              </div>
+              <label class="pay-opt" id="optCod">
+                <input type="radio" name="pay" value="cod">
+                <i class="ph ph-money big"></i>
+                <div><strong>Cash on Delivery</strong><small>Pay in cash when your order arrives</small></div>
+              </label>
+            </div>
+          </form>
+        </div>
+
+        <!-- order summary -->
+        <div class="col-lg-5">
+          <div class="co-card co-sum">
+            <h3>Order summary</h3>
+            <div id="coItems"></div>
+            <div class="sum-row mt-2"><span>Subtotal</span><span id="coSub">₹0</span></div>
+            <div class="sum-row"><span>Delivery</span><span>Free</span></div>
+            <div class="sum-row big"><span>Total</span><span id="coTotal">₹0</span></div>
+            <button type="submit" form="coForm" class="btn-vw btn-cart mt-3" id="coBtn"></button>
+            <div class="co-note"><i class="ph ph-shield-check"></i><span>Insured delivery, 7-day returns and brand warranty on every order.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- empty bag view -->
+    <div id="coEmpty" class="text-center py-5" hidden>
+      <div class="cart-empty"><i class="ph ph-shopping-bag"></i>Your bag is empty.<br>Add a watch to check out.</div>
+      <button type="button" class="btn-vw btn-solid" data-co-continue>Continue shopping <i class="ph ph-arrow-right"></i></button>
+    </div>
+
+    <!-- order placed view -->
+    <div id="coDone" hidden></div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer id="care">
+  <div class="f-perks"><div class="container"><div class="row g-4">
+    <div class="col-6 col-lg-3"><div class="f-perk"><i class="ph ph-truck"></i><div><strong>Free delivery</strong><small>Insured, on every order</small></div></div></div>
+    <div class="col-6 col-lg-3"><div class="f-perk"><i class="ph ph-arrow-counter-clockwise"></i><div><strong>7-day returns</strong><small>Simple and hassle-free</small></div></div></div>
+    <div class="col-6 col-lg-3"><div class="f-perk"><i class="ph ph-shield-check"></i><div><strong>Authentic watches</strong><small>Brand warranty included</small></div></div></div>
+    <div class="col-6 col-lg-3"><div class="f-perk"><i class="ph ph-credit-card"></i><div><strong>Secure payment</strong><small>Cards, UPI and EMI</small></div></div></div>
+  </div></div></div>
+
+  <div class="f-main"><div class="container"><div class="row g-5">
+    <div class="col-12 col-lg-4">
+      <div class="brand mb-3" style="justify-self:auto"><i class="ph ph-watch"></i>Verdant Watches</div>
+      <p>Precision-crafted watches for people who appreciate timeless elegance. From everyday classics to Swiss icons, every piece is authentic and delivered insured.</p>
+      <div class="socials">
+        <a class="soc" href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+        <a class="soc" href="https://x.com/" target="_blank" rel="noopener" aria-label="X"><i class="ph ph-x-logo"></i></a>
+        <a class="soc" href="https://youtube.com/" target="_blank" rel="noopener" aria-label="YouTube"><i class="ph ph-youtube-logo"></i></a>
+        <a class="soc" href="https://facebook.com/" target="_blank" rel="noopener" aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>
+        <a class="soc" href="https://wa.me/919876543210" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="ph ph-whatsapp-logo"></i></a>
+      </div>
+      <form class="news" id="newsForm">
+        <input type="email" placeholder="Email for offers and new arrivals" aria-label="Email" required>
+        <button type="submit" aria-label="Subscribe"><i class="ph ph-paper-plane-tilt"></i></button>
+      </form>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-2">
+      <h5 class="f-title">Shop</h5>
+      <ul class="f-list" id="footShop"></ul>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-3">
+      <h5 class="f-title">Customer care</h5>
+      <div class="f-item"><i class="ph ph-phone-call"></i><div><strong>Call us</strong><a href="tel:+919876543210">+91 98765 43210</a></div></div>
+      <div class="f-item"><i class="ph ph-whatsapp-logo"></i><div><strong>WhatsApp</strong><a href="https://wa.me/919876543210" target="_blank" rel="noopener">+91 98765 43210</a></div></div>
+      <div class="f-item"><i class="ph ph-envelope-simple"></i><div><strong>Email</strong><a href="mailto:care@verdantwatches.com">care@verdantwatches.com</a></div></div>
+      <div class="f-item"><i class="ph ph-clock"></i><div><strong>Support hours</strong>Mon–Sat, 9am–7pm</div></div>
+    </div>
+
+    <!-- Outlets (sample addresses: replace with your real stores) -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <h5 class="f-title">Our outlets</h5>
+      <div class="f-item"><i class="ph ph-map-pin"></i><div><strong>Mumbai</strong>12 Linking Road, Bandra West</div></div>
+      <div class="f-item"><i class="ph ph-map-pin"></i><div><strong>Delhi</strong>24 Khan Market, Central Delhi</div></div>
+      <div class="f-item"><i class="ph ph-map-pin"></i><div><strong>Bengaluru</strong>8 Vittal Mallya Road</div></div>
+      <div class="f-item"><i class="ph ph-map-pin"></i><div><strong>Chennai</strong>31 Nungambakkam High Road</div></div>
+      <small class="text-white-50">Open daily, 10am–8pm</small>
+    </div>
+  </div></div></div>
+
+  <div class="f-bottom"><div class="container f-row">
+    <span>© 2026 Verdant Watches. All rights reserved.</span>
+    <span class="pay"><i class="ph ph-credit-card"></i><i class="ph ph-bank"></i><i class="ph ph-qr-code"></i><i class="ph ph-wallet"></i></span>
+    <span class="f-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Shipping</a></span>
+  </div></div>
+</footer>
+
+<!-- ===== Product details window ===== -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailHeading" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl modal-fullscreen-sm-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="detailHeading">Watch details</h3>
+        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="detailBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Cart drawer ===== -->
+<div class="offcanvas offcanvas-end cart-canvas" tabindex="-1" id="cartDrawer">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title">Your bag</h5>
+    <button class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body p-3" id="cartBody"></div>
+  <div class="cart-foot" id="cartFoot">
+    <div class="total"><span>Total</span><span id="cartTotal">₹0</span></div>
+    <button class="btn-vw btn-cart" id="checkoutBtn"><i class="ph ph-lock-key"></i>Checkout</button>
+  </div>
+</div>
+
+<!-- ===== Login / register ===== -->
+<div class="modal fade" id="authModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content auth">
+  <div class="modal-header border-0 pb-0"><h3 class="modal-title" id="authTitle">Welcome back</h3><button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+  <div class="modal-body p-4">
+    <div id="authOut">
+      <ul class="nav nav-pills nav-fill mb-4">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tabLogin" type="button">Log in</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tabReg" type="button">Create account</button></li>
+      </ul>
+      <div class="tab-content">
+        <form class="tab-pane fade show active" id="tabLogin" data-auth="login">
+          <div class="mb-3"><input class="form-control" type="email" name="email" placeholder="Email address" required></div>
+          <div class="mb-3 pw"><input class="form-control" type="password" name="pw" placeholder="Password" minlength="6" required><button type="button" class="eye" aria-label="Show password"><i class="ph ph-eye"></i></button></div>
+          <button class="btn-vw btn-cart" type="submit"><i class="ph ph-sign-in"></i>Log in</button>
+        </form>
+        <form class="tab-pane fade" id="tabReg" data-auth="register">
+          <div class="mb-3"><input class="form-control" name="name" placeholder="Full name" required></div>
+          <div class="mb-3"><input class="form-control" type="email" name="email" placeholder="Email address" required></div>
+          <div class="mb-3 pw"><input class="form-control" type="password" name="pw" placeholder="Password (min 6 characters)" minlength="6" required><button type="button" class="eye" aria-label="Show password"><i class="ph ph-eye"></i></button></div>
+          <button class="btn-vw btn-cart" type="submit"><i class="ph ph-user-plus"></i>Create account</button>
+        </form>
+      </div>
+    </div>
+    <div id="authIn" class="text-center d-none">
+      <i class="ph ph-user-circle" style="font-size:4rem;color:var(--deep)"></i>
+      <p class="mb-1">Signed in as</p><h4 id="authName" class="mb-3"></h4>
+      <button class="btn-vw btn-cart" id="logoutBtn"><i class="ph ph-sign-out"></i>Log out</button>
+    </div>
+  </div>
+</div></div></div>
+
+<!-- ===== Search ===== -->
+<div class="modal fade" id="searchModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"><div class="modal-content">
+  <div class="modal-header border-0"><input class="form-control" id="searchInput" placeholder="Search watches or brands…" autocomplete="off"><button class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button></div>
+  <div class="modal-body pt-0" id="searchResults"></div>
+</div></div></div>
+
+<div class="vw-toast" id="toast"><i class="ph ph-check-circle"></i><span id="toastText"></span></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+/* =====================================================================
+   DATA: brands, products, prices, PHOTOS and offers. Edit here.
+
+   >>> HOW TO ADD A PHOTO <<<
+   Each product has an  img:"..."  line. Two ways to fill it:
+     1) Local file : put the picture in the "images" folder next to index.html
+                     and keep the name exactly as written, e.g.  images/rolex/datejust-41.jpg
+                     (if your file is .png or .jpeg, just change the ending here)
+     2) Web link   : paste a full address, e.g.  img:"https://example.com/watch.jpg"
+   If a picture is missing or the name is wrong, a drawn watch shows instead.
+
+   Prices are SAMPLE prices in INR. off:15 = 15% discount badge.
+   ===================================================================== */
+const brands = [
+ {key:"verdant",name:"Verdant Watches",title:"Featured Timepieces",tagline:"Designed to make every second count.",p:[
+  {n:"Verdant Classic",d:"Slim case, sunburst emerald dial.",r:5,price:24999,off:15,img:"561894491033927327.jpg"},
+  {n:"Emerald Chronograph",d:"Three sub-dials, sapphire crystal.",r:5,price:34999,off:10,img:"Luxury Watch Branding _ EVON Premium Watch Brand Visual Identity Design.jpg"},
+  {n:"Forest Automatic",d:"Self-winding, exhibition caseback.",r:4,price:42999,img:"The Luxe Hour — Forest Green Chronograph.jpg"},
+  {n:"Heritage Gold",d:"Gold-tone case, deep green dial.",r:5,price:54999,img:"Porsche Watches Concept.jpg"}]},
+ {key:"rolex",name:"Rolex",lux:true,tagline:"The crown of Swiss watchmaking.",p:[
+  {n:"Rolex Datejust 41",d:"Oystersteel, fluted bezel, automatic.",r:5,price:1050000,img:"70437484224798.jpg"},
+  {n:"Rolex Submariner Date",d:"300m divers' watch, Cerachrom bezel.",r:5,price:1380000,img:"The Rolex Submariner Date in Oystersteel and….jpg"},
+  {n:"Rolex GMT-Master II",d:"Dual time zone, two-tone bezel.",r:5,price:1650000,img:"Rolex GMT-Master II en Acero Oystersteel, caja de 40 mm.jpg"},
+  {n:"Rolex Cosmograph Daytona",d:"Racing chronograph, in 18k gold.",r:5,price:4250000,img:"Rolex Daytona – Platinum Ice Blue Dial Chronograph – $399 ⌚.jpg"}]},
+ {key:"patek",name:"Patek Philippe",lux:true,tagline:"You never actually own one. You merely look after it.",p:[
+  {n:"Patek Calatrava",d:"Slim dress watch in 18k rose gold.",r:5,price:3200000,img:"Hands-On_ The Patek Philippe Calatrava Ref_ 6119.jpg"},
+  {n:"Patek Aquanaut",d:"Embossed rubber strap, steel case.",r:5,price:6500000,img:"Patek Phillipe sports watch.jpg"},
+  {n:"Patek Nautilus",d:"Iconic porthole case, blue dial.",r:5,price:9800000,img:"Patek Philippe Nautilus 5712_1A-001.jpg"},
+  {n:"Patek Grand Complications",d:"Perpetual calendar, platinum.",r:5,price:21500000,img:"Discover the Most Expensive Watch Ever Sold.jpg"}]},
+ {key:"seiko",name:"Seiko",tagline:"Japanese automatics built for daily wear.",p:[
+  {n:"Seiko 5 Sports",d:"Automatic with day-date display.",r:5,price:28999,off:12,img:"The Ultimate Luxury Experience! ⚡ Seiko 5 Sports Orange Dial Automatic.jpg"},
+  {n:"Seiko Presage",d:"Enamel-style dial, dress watch.",r:5,price:41999,img:"Bold Luxury Timepiece_ Seiko Chronograph with Vibrant Yellow Dial SSC947.jpg"},
+  {n:"Seiko Prospex",d:"Diver-inspired, 200m water resistance.",r:4,price:36999,off:10,img:"7107311903284010.jpg"},
+  {n:"Seiko Astron",d:"Solar GPS timekeeping.",r:5,price:89999,img:"Vintage Charm Meets Modern Tech_ The Seiko Speedtimer SSC937P1 Review (Solar-Powered Chronograph) — MTR Watches.jpg"}]},
+{key:"tissot",name:"Tissot",tagline:"Swiss heritage since 1853.",p:[
+  {n:"Tissot PRX",d:"Integrated bracelet, quartz.",r:5,price:32999,off:8,img:"Tissot PRX 40mm Powermatic 80 - The Ultimate Luxury Watch for Men.jpg"},
+  {n:"Tissot Gentleman",d:"Powermatic 80 automatic.",r:5,price:58999,img:"$1,025_ Tissot Mens Gentleman Powermatic 80 Open Heart 316L Stainless Steel case Automatic Watches.jpg"},
+  {n:"Tissot Le Locle",d:"Classic dress automatic.",r:4,price:52999,img:"$715_00 Tissot Le Locle 40mm, Swiss Automatic Watch for Men.jpg"},
+  {n:"Tissot Seastar",d:"Dive watch with ceramic bezel.",r:4,price:47999,off:10,img:"Tissot Seastar 1000 Powermatic 80 dive watch.jpg"}]},
+];
+
+/* Offer banners shown AFTER the brand section with the same key.
+   Add "code" for a copy-code button, or "link" for a normal button. (Codes are demo only.) */
+const offers = {
+ verdant:{cls:"o1",icon:"ph-seal-percent",title:"Festive sale: up to 20% off",text:"On selected Verdant and Seiko watches.",code:"FESTIVE20"},
+ patek:{cls:"o2",icon:"ph-shield-check",title:"Luxury, insured and delivered",text:"Free insured delivery and a 5-year service warranty on every Rolex and Patek Philippe.",link:"#care",btn:"Talk to us"},
+ tissot:{cls:"o3",icon:"ph-tag",title:"Buy two watches, save 15%",text:"Mix any brands. The discount applies at checkout.",code:"PAIR15"}
+};
+
+/* States and union territories for the checkout address form */
+const STATES = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli and Daman and Diu","Delhi","Jammu and Kashmir","Ladakh","Lakshadweep","Puducherry"];
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const fmt = n => "₹" + n.toLocaleString("en-IN");
+const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const stars = n => Array.from({length:5},(_,i)=>`<i class="ph${i<n?"-fill":""} ph-star"></i>`).join("");
+const drawn = `<div class="watch"><div class="face"><i class="hand h"></i><i class="hand m"></i><i class="pin"></i></div></div>`;
+const save = (k,v) => { try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} };
+const load = (k,f) => { try{return JSON.parse(localStorage.getItem(k))??f}catch(e){return f} };
+const mrpOf = p => p.off ? Math.round(p.price/(1-p.off/100)/10)*10 : 0;
+
+const all = [];
+brands.forEach(b => b.p.forEach((p,i) => all.push({...p, id:`${b.key}-${i+1}`, key:b.key, lux:!!b.lux, brand:b.name, img:p.img||`images/${b.key}/${i+1}.jpg`})));
+const byId = id => all.find(p=>p.id===id);
+
+let cart = load("vw_cart",{});
+let wish = new Set(load("vw_wish",[]));
+let user = load("vw_user",null);
+
+/* ---------- render ---------- */
+function card(p){
+  const mrp = mrpOf(p);
+  return `<div class="col-12 col-sm-6 col-xl-3"><article class="card-vw">
+    <div class="media" data-view="${p.id}" style="--img:url('${p.img.replace(/'/g,"%27")}')">
+      ${p.off?`<span class="off-badge"><i class="ph-fill ph-seal-percent"></i>${p.off}% off</span>`:""}
+      <button class="wish ${wish.has(p.id)?"on":""}" data-id="${p.id}" aria-label="Add ${p.n} to wishlist"><i class="ph${wish.has(p.id)?"-fill":""} ph-heart"></i></button>
+      ${drawn}<img class="photo" src="${p.img}" alt="${p.n}" loading="lazy" decoding="async" onload="this.parentElement.classList.add('has-img')" onerror="this.remove()">
+    </div>
+    <div class="body-vw"><h3 data-view="${p.id}">${p.n}</h3><p>${p.d}</p>
+      <div class="stars">${stars(p.r)}</div>
+      <div class="price">${fmt(p.price)}${mrp?`<s>${fmt(mrp)}</s>`:""}</div>
+      <button class="btn-vw btn-cart" data-view="${p.id}"><i class="ph ph-eye"></i>View Details</button>
+    </div></article></div>`;
+}
+function offerBanner(o){
+  const action = o.code
+    ? `<button class="code" data-code="${o.code}"><i class="ph ph-copy"></i>${o.code}</button>`
+    : `<a class="btn-vw btn-solid" href="${o.link}">${o.btn}<i class="ph ph-arrow-right"></i></a>`;
+  return `<div class="offer-sec"><div class="container"><div class="offer ${o.cls}">
+    <div class="o-ic"><i class="ph ${o.icon}"></i></div>
+    <div class="o-txt"><h3>${o.title}</h3><p>${o.text}</p></div>${action}</div></div></div>`;
+}
+$("#brandSections").innerHTML = brands.map((b,n)=>`
+ <section class="section ${n%2?"alt":""}" id="${b.key}"><div class="container">
+  <div class="sec-head"><div>
+    ${b.lux?'<div class="tag-lux"><i class="ph-fill ph-crown-simple"></i>Luxury collection</div>':''}
+    <h2>${b.title||b.name}</h2><p class="sub">${b.tagline}</p></div>
+    <a class="view-all" href="#${b.key}">${b.name} <i class="ph ph-arrow-right"></i></a></div>
+  <div class="row g-4">${all.filter(p=>p.id.startsWith(b.key+"-")).map(card).join("")}</div>
+ </div></section>${offers[b.key]?offerBanner(offers[b.key]):""}`).join("");
+
+$("#brandMenu").innerHTML = brands.filter(b=>b.key!=="verdant").map(b=>`<li><a class="dropdown-item" href="#${b.key}">${b.name}</a></li>`).join("");
+$("#mobileCats").innerHTML = brands.map((b,i)=>`<a class="m-cat st" style="--i:${i+6}" href="#${b.key}"><span>${b.name}</span>${b.lux?'<i class="ph-fill ph-crown-simple lux"></i>':'<i class="ph ph-arrow-right"></i>'}</a>`).join("");
+$("#footShop").innerHTML = brands.map(b=>`<li><a href="#${b.key}">${b.name}</a></li>`).join("");
+$("#coState").innerHTML = '<option value="">Select state</option>' + STATES.map(s=>`<option>${s}</option>`).join("");
+
+/* ---------- toast & badges ---------- */
+const bump = el => {el.classList.remove("bump");void el.offsetWidth;el.classList.add("bump")};
+let tt; function toast(m){$("#toastText").textContent=m;$("#toast").classList.add("show");clearTimeout(tt);tt=setTimeout(()=>$("#toast").classList.remove("show"),2200)}
+function setWishCount(anim){document.querySelectorAll(".wish-count").forEach(el=>{el.textContent=wish.size;if(anim)bump(el)})}
+
+/* ---------- product details + similar watches ---------- */
+/* Similar = watches from the same brand first, then the closest in price from other brands. */
+function similarTo(p){
+  return all.filter(x=>x.id!==p.id)
+    .sort((a,b)=>((a.key===p.key?0:1)-(b.key===p.key?0:1)) ||
+      (Math.abs(Math.log(a.price/p.price))-Math.abs(Math.log(b.price/p.price))))
+    .slice(0,4);
+}
+function simCard(p){
+  return `<div class="col-6 col-md-3"><article class="sim" data-view="${p.id}">
+    <div class="media" style="--img:url('${p.img.replace(/'/g,"%27")}')">${drawn}<img class="photo" src="${p.img}" alt="${p.n}" loading="lazy" decoding="async" onload="this.parentElement.classList.add('has-img')" onerror="this.remove()"></div>
+    <div class="sim-b"><h4>${p.n}</h4><span>${fmt(p.price)}</span></div></article></div>`;
+}
+function renderDetail(id){
+  const p=byId(id), mrp=mrpOf(p);
+  $("#detailBody").innerHTML = `
+  <div class="row g-4 align-items-start">
+    <div class="col-md-6">
+      <div class="media d-media" style="--img:url('${p.img.replace(/'/g,"%27")}')">
+        ${p.off?`<span class="off-badge"><i class="ph-fill ph-seal-percent"></i>${p.off}% off</span>`:""}
+        <button class="wish ${wish.has(p.id)?"on":""}" data-id="${p.id}" aria-label="Add ${p.n} to wishlist"><i class="ph${wish.has(p.id)?"-fill":""} ph-heart"></i></button>
+        ${drawn}<img class="photo" src="${p.img}" alt="${p.n}" decoding="async" onload="this.parentElement.classList.add('has-img')" onerror="this.remove()">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="d-brand">${p.brand}${p.lux?'<i class="ph-fill ph-crown-simple"></i>':''}</div>
+      <h2 class="d-name">${p.n}</h2>
+      <div class="stars">${stars(p.r)}</div>
+      <p class="d-desc">${p.d}</p>
+      <div class="d-price">${fmt(p.price)}${mrp?`<s>${fmt(mrp)}</s><span class="d-off"><i class="ph-fill ph-seal-percent"></i>${p.off}% off</span>`:""}</div>
+      <div class="d-perks">
+        <div class="d-perk"><i class="ph ph-truck"></i><div><strong>Free delivery</strong><small>Insured, on every order</small></div></div>
+        <div class="d-perk"><i class="ph ph-arrow-counter-clockwise"></i><div><strong>7-day returns</strong><small>Simple and hassle-free</small></div></div>
+        <div class="d-perk"><i class="ph ph-shield-check"></i><div><strong>Brand warranty</strong><small>Included</small></div></div>
+        <div class="d-perk"><i class="ph ph-seal-check"></i><div><strong>100% authentic</strong><small>Checked before it ships</small></div></div>
+      </div>
+      <button class="btn-vw btn-cart" data-dadd="${p.id}"><i class="ph ph-shopping-bag"></i>Add to Cart</button>
+    </div>
+  </div>
+  <div class="d-sim">
+    <h3>Similar watches</h3>
+    <p class="sub mb-3">You may also like</p>
+    <div class="row g-3">${similarTo(p).map(simCard).join("")}</div>
+  </div>`;
+}
+
+/* ---------- cart ---------- */
+function renderCart(){
+  const ids = Object.keys(cart).filter(id=>byId(id));
+  const count = ids.reduce((s,id)=>s+cart[id],0);
+  const total = ids.reduce((s,id)=>s+cart[id]*byId(id).price,0);
+  $("#cartCount").textContent = count;
+  $("#cartTotal").textContent = fmt(total);
+  $("#cartFoot").classList.toggle("d-none", !ids.length);
+  $("#cartBody").innerHTML = ids.length ? ids.map(id=>{const p=byId(id);return `
+    <div class="cart-row">
+      <div class="cart-thumb">${drawn}<img class="photo" src="${p.img}" alt="" onload="this.parentElement.classList.add('has-img')" onerror="this.remove()"></div>
+      <div class="cart-info"><h4>${p.n}</h4><small>${fmt(p.price)}</small><br>
+        <div class="qty"><button data-dec="${id}" aria-label="Decrease"><i class="ph ph-minus"></i></button><span>${cart[id]}</span><button data-inc="${id}" aria-label="Increase"><i class="ph ph-plus"></i></button></div></div>
+      <button class="rm" data-rm="${id}" aria-label="Remove"><i class="ph ph-trash"></i></button>
+    </div>`}).join("")
+    : `<div class="cart-empty"><i class="ph ph-shopping-bag"></i>Your bag is empty.<br>Add a watch to get started.</div>`;
+  save("vw_cart",cart);
+  if(!$("#checkoutPage").hidden && !$("#coMain").hidden) renderCheckout();   // keep the checkout summary in sync
+}
+function addToCart(id, open){
+  cart[id]=(cart[id]||0)+1; renderCart(); bump($("#cartCount"));
+  toast(`${byId(id).n} added to bag`);
+  if(open) bootstrap.Offcanvas.getOrCreateInstance("#cartDrawer").show();
+}
+
+/* ---------- checkout page ---------- */
+const coVisible = () => !$("#checkoutPage").hidden;
+function coView(v){
+  $("#coMain").hidden = v!=="form";
+  $("#coEmpty").hidden = v!=="empty";
+  $("#coDone").hidden = v!=="done";
+}
+function showShop(){ $("#checkoutPage").hidden=true; $("#shop").hidden=false; }
+function goTo(sel){
+  if(coVisible()) showShop();
+  const x=document.querySelector(sel); if(x) x.scrollIntoView({behavior:"smooth"});
+}
+function cartTotal(){
+  return Object.keys(cart).filter(id=>byId(id)).reduce((s,id)=>s+cart[id]*byId(id).price,0);
+}
+function updatePayUI(){
+  const pay=$("#coForm").pay.value, total=fmt(cartTotal()), btn=$("#coBtn");
+  $("#optUpi").classList.toggle("sel",pay==="upi");
+  $("#optCod").classList.toggle("sel",pay==="cod");
+  $("#upiBox").hidden = pay!=="upi";
+  $("#coUpi").disabled = pay!=="upi";          // a hidden UPI field is skipped by validation
+  btn.disabled=false;
+  btn.innerHTML = pay==="upi"
+    ? `<i class="ph ph-lock-key"></i>Pay ${total} with UPI`
+    : `<i class="ph ph-check-circle"></i>Place order · Cash on Delivery`;
+}
+function renderCheckout(){
+  const ids=Object.keys(cart).filter(id=>byId(id));
+  if(!ids.length){ coView("empty"); return; }
+  coView("form");
+  $("#coItems").innerHTML = ids.map(id=>{const p=byId(id);return `
+    <div class="co-item">
+      <div class="cart-thumb">${drawn}<img class="photo" src="${p.img}" alt="" onload="this.parentElement.classList.add('has-img')" onerror="this.remove()"></div>
+      <div class="nm"><strong>${p.n}</strong><small>Qty ${cart[id]}</small></div>
+      <div class="pr">${fmt(p.price*cart[id])}</div>
+    </div>`}).join("");
+  $("#coSub").textContent = $("#coTotal").textContent = fmt(cartTotal());
+  updatePayUI();
+}
+function prefill(){
+  const saved=load("vw_addr",{}), f=$("#coForm");
+  const vals={...saved};
+  if(user){ vals.name=vals.name||user.name; vals.email=vals.email||user.email; }
+  Object.entries(vals).forEach(([k,v])=>{ if(f.elements[k] && !f.elements[k].value) f.elements[k].value=v; });
+}
+function showCheckout(push){
+  $("#shop").hidden=true; $("#checkoutPage").hidden=false;
+  renderCheckout(); prefill();
+  if(push){ try{history.pushState({co:1},"")}catch(e){} }
+  window.scrollTo(0,0);
+}
+function openCheckout(){
+  bootstrap.Offcanvas.getInstance("#cartDrawer")?.hide();
+  if(coVisible()){ if(!$("#coDone").hidden) return; renderCheckout(); return; }
+  showCheckout(true);
+  setTimeout(()=>window.scrollTo(0,0),380);
+}
+window.addEventListener("popstate",()=>{ if(coVisible()) showShop(); });
+
+function showDone(o){
+  const payLine = o.pay==="cod"
+    ? `Cash on Delivery: pay ${fmt(o.total)} when your order arrives`
+    : `UPI (${esc(o.upi)})`;
+  $("#coDone").innerHTML = `
+  <div class="co-done">
+    <div class="done-ic"><i class="ph-fill ph-check-circle"></i></div>
+    <h1 class="co-title">Order placed</h1>
+    <p class="sub">Thank you, ${esc(o.name)}. Our team will confirm your order shortly.</p>
+    <div class="co-card text-start mt-4">
+      <div class="co-line"><span>Order number</span><strong>${o.id}</strong></div>
+      <div class="co-line"><span>Date</span><strong>${esc(o.date)}</strong></div>
+      <div class="co-line"><span>Payment</span><strong class="text-end">${payLine}</strong></div>
+      <h4 class="mt-4">Delivering to</h4>
+      <p class="mb-0">${esc(o.name)}<br>${esc(o.line1)}${o.line2?", "+esc(o.line2):""}<br>${esc(o.city)}, ${esc(o.state)} ${esc(o.pin)}<br>Mobile: ${esc(o.phone)}</p>
+      <h4 class="mt-4">Items</h4>
+      ${o.items.map(i=>`<div class="co-line"><span>${esc(i.n)} × ${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`).join("")}
+      <div class="sum-row big"><span>Total</span><span>${fmt(o.total)}</span></div>
+    </div>
+    <button type="button" class="btn-vw btn-solid mt-4" data-co-continue>Continue shopping <i class="ph ph-arrow-right"></i></button>
+  </div>`;
+  coView("done");
+  window.scrollTo({top:0});
+}
+function finishOrder(f){
+  const ids=Object.keys(cart).filter(id=>byId(id));
+  const items=ids.map(id=>({n:byId(id).n,qty:cart[id],price:byId(id).price}));
+  const total=items.reduce((s,i)=>s+i.qty*i.price,0);
+  const d=Object.fromEntries(new FormData(f));
+  const order={
+    id:"VW"+Math.floor(100000+Math.random()*900000),
+    date:new Date().toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}),
+    items,total,pay:d.pay,upi:d.pay==="upi"?d.upi:"",
+    name:d.name,phone:d.phone,email:d.email,line1:d.line1,line2:d.line2||"",city:d.city,state:d.state,pin:d.pin
+  };
+  save("vw_orders",[order,...load("vw_orders",[])].slice(0,20));
+  save("vw_addr",{name:d.name,phone:d.phone,email:d.email,line1:d.line1,line2:d.line2||"",city:d.city,state:d.state,pin:d.pin});
+  cart={}; renderCart();
+  f.reset(); f.classList.remove("was-validated");
+  showDone(order);
+  toast("Order placed");
+}
+/* choose UPI or Cash on Delivery */
+document.querySelectorAll('input[name="pay"]').forEach(r=>r.addEventListener("change",updatePayUI));
+/* submit: check the address, then place the order (Cash on Delivery places it straight away) */
+$("#coForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const f=e.target;
+  f.classList.add("was-validated");
+  if(!f.checkValidity()){
+    const bad=f.querySelector(":invalid");
+    if(bad){ bad.focus({preventScroll:true}); bad.scrollIntoView({behavior:"smooth",block:"center"}); }
+    toast("Please check the highlighted fields");
+    return;
+  }
+  const cod=f.pay.value==="cod", btn=$("#coBtn");
+  btn.disabled=true;
+  btn.innerHTML=`<span class="spinner-border spinner-border-sm"></span>${cod?"Placing your order…":"Sending payment request…"}`;
+  setTimeout(()=>finishOrder(f), cod?700:1600);
+});
+
+/* ---------- clicks ---------- */
+document.addEventListener("click", e=>{
+  const t = s => e.target.closest(s);
+  let el;
+  if(el=t(".wish")){                                   // heart: works on cards and in the details window
+    const id=el.dataset.id; wish.has(id)?wish.delete(id):wish.add(id);
+    const on=wish.has(id);
+    document.querySelectorAll(`.wish[data-id="${id}"]`).forEach(b=>{
+      b.classList.toggle("on",on);
+      b.innerHTML=`<i class="ph${on?"-fill":""} ph-heart"></i>`;
+    });
+    setWishCount(true); save("vw_wish",[...wish]);
+    toast(on?`${byId(id).n} saved to wishlist`:`Removed from wishlist`);
+  }
+  else if(el=t("[data-view]")){                        // photo, name or View Details: open details; similar watch: switch details
+    const id=el.dataset.view, open=$("#detailModal").classList.contains("show");
+    renderDetail(id);
+    if(open) $("#detailModal .modal-body").scrollTo({top:0,behavior:"smooth"});
+    else bootstrap.Modal.getOrCreateInstance("#detailModal").show();
+  }
+  else if(el=t("[data-dadd]")){                        // Add to Cart inside the details window
+    addToCart(el.dataset.dadd,false);
+    el.classList.add("added"); el.innerHTML='<i class="ph ph-check"></i>Added';
+    $("#detailModal").addEventListener("hidden.bs.modal",()=>bootstrap.Offcanvas.getOrCreateInstance("#cartDrawer").show(),{once:true});
+    setTimeout(()=>bootstrap.Modal.getOrCreateInstance("#detailModal").hide(),550);
+  }
+  else if(el=t("[data-co-back]")){                     // back from checkout
+    if(history.state && history.state.co){ history.back(); } else { showShop(); window.scrollTo(0,0); }
+  }
+  else if(el=t("[data-co-continue]")){ showShop(); window.scrollTo(0,0); }
+  else if(el=t("[data-inc]")){cart[el.dataset.inc]++;renderCart()}
+  else if(el=t("[data-dec]")){const id=el.dataset.dec; cart[id]>1?cart[id]--:delete cart[id]; renderCart()}
+  else if(el=t("[data-rm]")){delete cart[el.dataset.rm];renderCart()}
+  else if(el=t("[data-wishlist]")){toast(`${wish.size} watch${wish.size===1?"":"es"} in your wishlist`)}
+  else if(el=t(".eye")){
+    const inp=el.parentElement.querySelector("input"), show=inp.type==="password";
+    inp.type=show?"text":"password"; el.innerHTML=`<i class="ph ph-eye${show?"-slash":""}"></i>`;
+  }
+  else if(el=t("[data-sadd]")){addToCart(el.dataset.sadd,true);bootstrap.Modal.getInstance("#searchModal")?.hide()}
+  else if(el=t("[data-code]")){
+    const c=el.dataset.code;
+    try{navigator.clipboard.writeText(c).catch(()=>{})}catch(err){}
+    toast(`Code ${c} copied`);
+  }
+  else if(el=t("[data-menu-open]")){
+    const which=el.dataset.menuOpen;
+    $("#mobileMenu").addEventListener("hidden.bs.offcanvas",()=>{
+      bootstrap.Modal.getOrCreateInstance(which==="auth"?"#authModal":"#searchModal").show();
+    },{once:true});
+    bootstrap.Offcanvas.getOrCreateInstance("#mobileMenu").hide();
+  }
+  else if(el=t("#mobileMenu a[href^='#']")){
+    e.preventDefault();
+    const target=el.getAttribute("href");
+    $("#mobileMenu").addEventListener("hidden.bs.offcanvas",()=>goTo(target),{once:true});
+    bootstrap.Offcanvas.getOrCreateInstance("#mobileMenu").hide();
+  }
+  else if(el=t('a[href^="#"]')){                       // any site link while on the checkout page returns to the shop first
+    const h=el.getAttribute("href");
+    if(h.length>1 && coVisible()){ e.preventDefault(); goTo(h); }
+  }
+});
+setWishCount(false);
+$("#checkoutBtn").onclick=openCheckout;
+
+/* ---------- login / register (front-end demo only, no real authentication) ---------- */
+function renderAuth(){
+  $("#authOut").classList.toggle("d-none",!!user); $("#authIn").classList.toggle("d-none",!user);
+  $("#authTitle").textContent = user?"Your account":"Welcome back";
+  $("#userBtn").classList.toggle("in",!!user);
+  $("#userBtn").innerHTML = `<i class="ph${user?"-fill":""} ph-user"></i>`;
+  $("#menuUserLabel").textContent = user?"Account":"Log in";
+  if(user) $("#authName").textContent=user.name;
+}
+document.querySelectorAll("[data-auth]").forEach(f=>f.addEventListener("submit",e=>{
+  e.preventDefault(); const d=Object.fromEntries(new FormData(f));
+  user={name:d.name||d.email.split("@")[0],email:d.email};
+  save("vw_user",user); renderAuth(); f.reset();
+  toast(`Welcome, ${user.name}`); bootstrap.Modal.getInstance("#authModal").hide();
+}));
+$("#logoutBtn").onclick=()=>{user=null;localStorage.removeItem("vw_user");renderAuth();toast("Logged out");bootstrap.Modal.getInstance("#authModal").hide()};
+
+/* ---------- search ---------- */
+function runSearch(q){
+  q=q.trim().toLowerCase();
+  const hits = q ? all.filter(p=>(p.n+" "+p.brand).toLowerCase().includes(q)).slice(0,8) : [];
+  $("#searchResults").innerHTML = hits.length ? hits.map(p=>`
+    <div class="search-hit"><div><strong>${p.n}</strong><br><small class="text-muted">${fmt(p.price)}</small></div>
+    <button class="btn-vw btn-cart" style="width:auto;padding:.5rem 1rem" data-sadd="${p.id}"><i class="ph ph-plus"></i>Add</button></div>`).join("")
+    : `<p class="text-muted text-center py-4 mb-0">${q?"No watches found.":"Type a watch or brand name."}</p>`;
+}
+$("#searchInput").addEventListener("input",e=>runSearch(e.target.value));
+$("#searchModal").addEventListener("shown.bs.modal",()=>{$("#searchInput").focus();runSearch($("#searchInput").value)});
+
+/* ---------- forms ---------- */
+$("#contactForm").addEventListener("submit",e=>{e.preventDefault();e.target.reset();toast("Message sent. We'll call you soon.")});
+$("#newsForm").addEventListener("submit",e=>{e.preventDefault();e.target.reset();toast("Thanks for subscribing")});
+
+renderCart(); renderAuth();
+</script>
+</body>
+</html>
